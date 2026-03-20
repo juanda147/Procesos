@@ -1,6 +1,7 @@
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, Box, Divider } from '@mui/material';
 import { Dashboard, Gavel, NotificationsActive, Settings } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
+import JusticeLadyIcon from './JusticeLadyIcon';
 
 const DRAWER_WIDTH = 240;
 
@@ -29,12 +30,17 @@ export default function Sidebar() {
         },
       }}
     >
-      <Toolbar>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Gavel sx={{ color: '#a8c896' }} />
-          <Typography variant="h6" noWrap sx={{ color: '#a8c896' }} fontWeight="bold">
-            Procesos
-          </Typography>
+      <Toolbar sx={{ py: 2, minHeight: 80 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
+          <JusticeLadyIcon sx={{ color: '#a8c896', fontSize: 40 }} />
+          <Box>
+            <Typography variant="h6" noWrap sx={{ color: '#a8c896', lineHeight: 1.2 }} fontWeight="bold">
+              Procesos
+            </Typography>
+            <Typography variant="caption" noWrap sx={{ color: '#7a8a6e', letterSpacing: 0.5 }}>
+              Sistema Legal
+            </Typography>
+          </Box>
         </Box>
       </Toolbar>
       <Divider sx={{ borderColor: '#3d4446' }} />
