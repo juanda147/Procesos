@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@layer base {
+  *, ::before, ::after {
+    border-style: revert;
+    border-width: revert;
+    border-color: revert;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: revert;
+    font-weight: revert;
+  }
+  ol, ul {
+    list-style: revert;
+    margin: revert;
+    padding: revert;
+  }
+  a {
+    color: revert;
+    text-decoration: revert;
+  }
+  button, input, optgroup, select, textarea {
+    font-family: revert;
+    font-feature-settings: revert;
+    font-variation-settings: revert;
+    font-size: revert;
+    font-weight: revert;
+    line-height: revert;
+    letter-spacing: revert;
+    color: revert;
+    margin: revert;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: revert;
+    vertical-align: revert;
+  }
+}
+
+body {
+  margin: 0;
+}
