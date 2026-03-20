@@ -28,6 +28,18 @@ public class EmailService : IEmailService
 
     public async Task EnviarAsync(string destinatario, string asunto, string cuerpoHtml)
     {
+        await EnviarInternoAsync(destinatario, asunto, cuerpoHtml, null, null);
+    }
+
+    public async Task EnviarConAdjuntoAsync(string destinatario, string asunto, string cuerpoHtml,
+                                             Stream adjunto, string nombreAdjunto)
+    {
+        await EnviarInternoAsync(destinatario, asunto, cuerpoHtml, adjunto, nombreAdjunto);
+    }
+
+    private async Task EnviarInternoAsync(string destinatario, string asunto, string cuerpoHtml,
+                                           Stream? adjunto, string? nombreAdjunto)
+    {
         if (!EstaConfigurado)
         {
             _logger.LogWarning("Email no configurado. No se puede enviar correo a {Destinatario}", destinatario);
@@ -56,6 +68,12 @@ public class EmailService : IEmailService
                 IsBodyHtml = true
             };
             message.To.Add(destinatario);
+
+            if (adjunto != null && !string.IsNullOrWhiteSpace(nombreAdjunto))
+            {
+                adjunto.Position = 0;
+                message.Attachments.Add(new Attachment(adjunto, nombreAdjunto, "application/zip"));
+            }
 
             await client.SendMailAsync(message);
             _logger.LogInformation("Email enviado a {Destinatario}: {Asunto}", destinatario, asunto);

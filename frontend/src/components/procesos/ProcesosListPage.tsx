@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Typography, Button, TextField, MenuItem, Grid, IconButton, InputAdornment } from '@mui/material';
+import { Box, Typography, Button, TextField, MenuItem, Grid, IconButton, InputAdornment, Chip } from '@mui/material';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import { Add, Search, Visibility, Delete, Clear } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -10,15 +10,6 @@ import ConfirmDialog from '../common/ConfirmDialog';
 import ImportarDialog from '../importExport/ImportarDialog';
 import ExportarButton from '../importExport/ExportarButton';
 import type { ProcesoFiltros } from '../../types/proceso';
-
-const estadoBadge = (estado: string | null | undefined) => {
-  if (!estado) return null;
-  return (
-    <span className="text-blue-700 text-xs font-medium leading-snug" style={{ whiteSpace: 'normal', wordBreak: 'break-word', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} title={estado}>
-      {estado}
-    </span>
-  );
-};
 
 export default function ProcesosListPage() {
   const navigate = useNavigate();
@@ -42,9 +33,9 @@ export default function ProcesosListPage() {
 
   const columns: GridColDef[] = [
     { field: 'fecha', headerName: 'Fecha', width: 110, valueFormatter: (value: string) => formatDate(value) },
-    { field: 'demandante', headerName: 'Demandante', flex: 0.8, minWidth: 120 },
-    { field: 'demandado', headerName: 'Demandado', flex: 0.8, minWidth: 120 },
-    { field: 'radicado', headerName: 'Radicado', width: 130 },
+    { field: 'demandante', headerName: 'Demandante', minWidth: 120, flex: 1 },
+    { field: 'demandado', headerName: 'Demandado', minWidth: 120, flex: 1 },
+    { field: 'radicado', headerName: 'Radicado', minWidth: 120, flex: 0.8 },
     { field: 'ciudad', headerName: 'Ciudad', width: 110 },
     {
       field: 'claseProceso', headerName: 'Tipo', width: 150,
@@ -55,11 +46,39 @@ export default function ProcesosListPage() {
       ) : null,
     },
     {
-      field: 'estadoActual', headerName: 'Estado', flex: 1, minWidth: 180,
+      field: 'estadoActual', headerName: 'Estado', flex: 1, minWidth: 200,
       renderCell: (params) => (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-          {params.row.terminado && <span className="text-green-700 text-xs font-bold">✓ Terminado</span>}
-          {estadoBadge(params.value)}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, py: 0.5 }}>
+          {params.row.terminado && (
+            <Chip
+              label="Terminado"
+              size="small"
+              sx={{
+                bgcolor: '#e8f5e9',
+                color: '#2e7d32',
+                fontWeight: 700,
+                fontSize: '0.8rem',
+                height: 26,
+                '& .MuiChip-label': { px: 1.5 },
+              }}
+            />
+          )}
+          {params.value && (
+            <Typography
+              variant="body2"
+              title={params.value}
+              sx={{
+                color: '#1a5276',
+                fontWeight: 600,
+                fontSize: '0.85rem',
+                lineHeight: 1.4,
+                whiteSpace: 'normal',
+                wordBreak: 'break-word',
+              }}
+            >
+              {params.value}
+            </Typography>
+          )}
         </Box>
       ),
     },
@@ -144,13 +163,20 @@ export default function ProcesosListPage() {
         pageSizeOptions={[10, 20, 50]}
         disableRowSelectionOnClick
         autoHeight
-        rowHeight={72}
+        getRowHeight={() => 'auto'}
+        autosizeOnMount
+        autosizeOptions={{
+          columns: ['demandante', 'demandado', 'radicado'],
+          includeHeaders: true,
+          includeOutliers: false,
+          expand: true,
+        }}
         onRowDoubleClick={(params) => navigate(`/procesos/${params.id}`)}
         sx={{
           bgcolor: 'background.paper',
           borderColor: '#d5cec4',
           '& .MuiDataGrid-columnHeaders': { backgroundColor: '#ede8e0' },
-          '& .MuiDataGrid-cell': { display: 'flex', alignItems: 'center', py: 1, borderColor: '#e8e2d9' },
+          '& .MuiDataGrid-cell': { display: 'flex', alignItems: 'center', py: 1.5, borderColor: '#e8e2d9' },
           '& .MuiDataGrid-row:hover': { backgroundColor: '#f5f0e8' },
           '& .MuiDataGrid-cell--withRenderer .MuiDataGrid-cellContent': { overflow: 'hidden' },
         }}

@@ -15,6 +15,7 @@ builder.Services.AddScoped<ICatalogoService, CatalogoService>();
 builder.Services.AddScoped<ICampoGlobalService, CampoGlobalService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddHostedService<RecordatorioNotificacionService>();
+builder.Services.AddHostedService<BackupService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
